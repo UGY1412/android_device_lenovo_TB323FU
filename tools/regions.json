@@ -1,0 +1,74 @@
+{
+ "lpdump": "<WORKSPACE>",
+ "size": 21474836480,
+ "regions": [
+  {
+   "name": "header",
+   "offset": 0,
+   "length": 1048576,
+   "kind": "gap"
+  },
+  {
+   "name": "odm_b",
+   "offset": 1048576,
+   "length": 334217216,
+   "kind": "partition",
+   "start_sector": 2048,
+   "sectors": 652768
+  },
+  {
+   "name": "product_b",
+   "offset": 335265792,
+   "length": 2167775232,
+   "kind": "partition",
+   "start_sector": 654816,
+   "sectors": 4233936
+  },
+  {
+   "name": "system_b",
+   "offset": 2503041024,
+   "length": 10235101184,
+   "kind": "partition",
+   "start_sector": 4888752,
+   "sectors": 19990432
+  },
+  {
+   "name": "system_dlkm_b",
+   "offset": 12738142208,
+   "length": 14868480,
+   "kind": "partition",
+   "start_sector": 24879184,
+   "sectors": 29040
+  },
+  {
+   "name": "system_ext_b",
+   "offset": 12753010688,
+   "length": 562970624,
+   "kind": "partition",
+   "start_sector": 24908224,
+   "sectors": 1099552
+  },
+  {
+   "name": "vendor_b",
+   "offset": 13315981312,
+   "length": 2202816512,
+   "kind": "partition",
+   "start_sector": 26007776,
+   "sectors": 4302376
+  },
+  {
+   "name": "vendor_dlkm_b",
+   "offset": 15518797824,
+   "length": 118259712,
+   "kind": "partition",
+   "start_sector": 30310152,
+   "sectors": 230976
+  },
+  {
+   "name": "tail",
+   "offset": 15637057536,
+   "length": 5837778944,
+   "kind": "gap"
+  }
+ ]
+}

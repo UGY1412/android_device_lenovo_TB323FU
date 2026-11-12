@@ -1,0 +1,10 @@
+<!--
+    Input:
+        lenovo/lgsi/drvonly/interfaces_impl/pccsec/motorola.hardware.pccsec-service.xml
+-->
+<manifest version="9.0" type="device">
+    <hal format="aidl">
+        <name>motorola.hardware.pccsec</name>
+        <fqname>IPccSec/default</fqname>
+    </hal>
+</manifest>

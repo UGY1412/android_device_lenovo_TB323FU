@@ -1,0 +1,20 @@
+//
+// SPDX-FileCopyrightText: The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+
+// 这个文件的存在理由只有一个：
+//     device.mk 里有 `PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)`，
+//     而那句话要求本目录**确实是**一个 soong namespace —— 即必须有本文件定义它。
+//
+// 依据（子代理 A 的对照报告 §5.3 缺口 1）：
+//     两份同厂商参考树（lolipuru 的 asphalt / sm8475-common）**都在顶层放了 Android.bp**，
+//     内容就是 `soong_namespace {}`（asphalt 为空；common 带 imports）。
+//     我们此前只有 4 个 .mk、没有 Android.bp ⇒ 声明了 namespace 却没有定义，
+//     首次 soong 分析阶段会报错/告警。
+//
+// 之所以选择"加本文件"而不是"删掉 device.mk 里那行"：
+//     将来若要放 overlay 或 LenovoParts 之类的模块，必须有个 soong namespace 才放得下。
+//     （先例的 device.mk 正是靠 soong_namespace + overlay 包一起工作的。）
+soong_namespace {
+}

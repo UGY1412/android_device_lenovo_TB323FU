@@ -1,0 +1,10 @@
+<!--
+    Input:
+        lenovo/lgsi/drvonly/interfaces_impl/vibrator_dual/service/vendor.lenovo.hardware.vibrator_dual-service.xml
+-->
+<manifest version="9.0" type="device">
+    <hal format="aidl">
+        <name>vendor.lenovo.hardware.vibrator_dual</name>
+        <fqname>IVibratorDual/default</fqname>
+    </hal>
+</manifest>

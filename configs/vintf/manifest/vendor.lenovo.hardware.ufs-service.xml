@@ -1,0 +1,10 @@
+<!--
+    Input:
+        lenovo/lgsi/drvonly/interfaces_impl/ufs/service/vendor.lenovo.hardware.ufs-service.xml
+-->
+<manifest version="9.0" type="device">
+    <hal format="aidl">
+        <name>vendor.lenovo.hardware.ufs</name>
+        <fqname>IUfs/default</fqname>
+    </hal>
+</manifest>

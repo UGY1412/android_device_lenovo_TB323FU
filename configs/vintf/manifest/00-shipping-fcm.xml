@@ -1,0 +1,20 @@
+<!--
+    TB323FU：给合并后的 device manifest 补 Shipping FCM Version（target-level）。
+
+    背景（2026-10-11）：我们用原厂 vendor 分区的 103 个 HAL 分片作为
+    DEVICE_MANIFEST_FILE 重新合并，而分片本身都不带 target-level，
+    合并产物 `vendor/etc/vintf/manifest.xml` 因此是
+        <manifest version="9.0" type="device">
+    构建期 check_vintf_compatible 直接失败：
+        ERROR: Invalid argument: Device manifest does not specify Shipping FCM Version.
+        （system/libvintf/VintfObject.cpp:998 —— deviceManifest->level() 为空）
+
+    取值依据：原厂合并版 `vendor/etc/vintf/manifest_canoe.xml` 为
+        <manifest version="9.0" type="device" target-level="202504">
+    与 system/etc/vintf/ 下的 framework matrix 版本号（compatibility_matrix.202504.xml）一致。
+
+    机制：assemble_vintf 会把任一输入分片的 level 提到产物上
+    （system/libvintf/AssembleVintf.cpp:569-573），故用这个独立小分片承载。
+-->
+<manifest version="9.0" type="device" target-level="202504">
+</manifest>

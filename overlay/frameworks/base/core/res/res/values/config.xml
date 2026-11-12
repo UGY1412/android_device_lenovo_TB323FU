@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  TB323FU device resource overlay (static, merged into framework-res.apk).
+
+  The device has no hardware navigation keys, so the on-screen navigation bar
+  must be enabled explicitly. The AOSP framework default is 'false', and this
+  device tree previously had no overlay at all; as a result the device had no
+  navigation bar / back / recents affordance, and the Settings "System
+  navigation" screen was hidden (SystemNavigationPreferenceController requires
+  WindowManager.hasNavigationBar() == true, see
+  packages/apps/Settings/src/com/android/settings/gestures/SystemNavigationPreferenceController.java).
+-->
+<resources>
+    <bool name="config_showNavigationBar">true</bool>
+</resources>

@@ -1,0 +1,11 @@
+<!--
+    Input:
+        lenovo/lgsi/drvonly/interfaces_impl/led/service/vendor.lenovo.hardware.led.xml
+-->
+<manifest version="9.0" type="device">
+    <hal format="aidl">
+        <name>vendor.lenovo.hardware.led</name>
+        <version>2</version>
+        <fqname>ILed/default</fqname>
+    </hal>
+</manifest>

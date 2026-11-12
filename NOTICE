@@ -1,0 +1,20 @@
+TB323FU LineageOS 24 device tree
+Copyright (C) 2026 自恋也是种美 (krollv)
+
+This repository contains configuration files, scripts and documentation for
+porting LineageOS 24 (Android 17) to the Lenovo Legion Y700 Gen5 (TB323FU,
+SM8850P / kaanapali, codename TB323FU).
+
+No Lenovo or Qualcomm proprietary binaries, firmware, kernel images or disk
+images are distributed in this repository. Builders must obtain the required
+proprietary files from firmware they are legally entitled to use (for example,
+a full dump of their own device). See docs/COMPLIANCE.md and
+proprietary-files.txt.
+
+Third-party components and references retain their original notices. See
+CREDITS.md and docs/ATTRIBUTION.md.
+
+Trademarks: Lenovo, Legion, Qualcomm, Snapdragon, Android, LineageOS, TeamWin
+(TWRP), OrangeFox and AERA belong to their respective owners. This is an
+unofficial, community project and is not affiliated with, sponsored by, or
+endorsed by any of them.
