@@ -1,6 +1,6 @@
 作者/维护者：自恋也是种美，@DeepSeek V4.1 Flash 1017
 Copyright (C) 2026 自恋也是种美 (krollv)
-许可证：Apache-2.0 (original text)
+许可证：Apache-2.0
 
 # 01 · 设备事实 —— 联想拯救者 Y700 五代（TB323FU）
 

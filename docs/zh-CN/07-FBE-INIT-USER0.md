@@ -1,6 +1,6 @@
 作者/维护者：自恋也是种美，@DeepSeek V4.1 Flash 1017
 Copyright (C) 2026 自恋也是种美 (krollv)
-许可证：Apache-2.0 (original text)
+许可证：Apache-2.0
 
 # 07 — FBE / `init_user0` 机制、双 fstab 规则与 A–F 实验设计
 

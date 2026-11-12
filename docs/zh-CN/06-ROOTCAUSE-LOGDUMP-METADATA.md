@@ -1,6 +1,6 @@
 作者/维护者：自恋也是种美，@DeepSeek V4.1 Flash 1017
 Copyright (C) 2026 自恋也是种美 (krollv)
-许可证：Apache-2.0 (original text)
+许可证：Apache-2.0
 
 # 06 — 根因：`logdump.sh` 每启动 `dd` 写坏 `/metadata` → `init_user0_failed` → 被迫清 data
 
