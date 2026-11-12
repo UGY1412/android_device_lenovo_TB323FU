@@ -27,7 +27,7 @@ informed or was referenced by this work.
 | [isrgish/TB323FU-TWRP](https://github.com/isrgish/TB323FU-TWRP) | **No explicit LICENSE** (see note) | Lineage of the TB323FU recovery tree; not redistributed here — recovery repo is prepared as a fork |
 | [qingxin94/tb323fu-recovery](https://github.com/qingxin94/tb323fu-recovery) | No license declared | Public AERA-recovery device tree for TB323FU; cross-reference for the companion AERA repo |
 | [aweiyry/lenovo-ota-tool](https://github.com/aweiyry/lenovo-ota-tool) | MIT | **Reference only** for Lenovo OTA/partition extraction workflow; no code copied |
-| **DeepSeek V4.1 Flash 1017** | Tool (not a copyright holder) | Collaboration tool used to generate/organize parts of the code and documentation; maintainer reviewed and validated everything on hardware |
+| **DeepSeek V4.1 Flash 1017** | — | Co-author credit: collaboration on code and documentation |
 | Lenovo / Qualcomm proprietary blobs | Proprietary — **not included** | Listed in `proprietary-files.txt` only; builders must extract from their own legally obtained firmware |
 
 ## Notes / 说明

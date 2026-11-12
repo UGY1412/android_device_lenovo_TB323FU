@@ -1,6 +1,6 @@
 Author/Maintainer: krollv, @DeepSeek V4.1 Flash 1017
 Copyright (C) 2026 自恋也是种美 (krollv)
-License: Apache-2.0 (original text)
+License: Apache-2.0
 
 # 02 · Build — LineageOS 24.0 (Android 17) for TB323FU
 

@@ -1,6 +1,6 @@
 Author/Maintainer: krollv, @DeepSeek V4.1 Flash 1017
 Copyright (C) 2026 自恋也是种美 (krollv)
-License: Apache-2.0 (original text)
+License: Apache-2.0
 
 # 03 · Flash — TB323FU flashing, verification and rollback
 
@@ -11,20 +11,20 @@ License: Apache-2.0 (original text)
 | Scope | Write channels and their real capabilities, the exact current flash set (partition / LUN / LBA / size / image / SHA-256), step-by-step routes, post-write verification, stock-restore anchors, red lines, troubleshooting |
 | Evidence sources | `out/2026-11-12-edl-f0/F0-ACCEPTANCE-REPORT.md`; `out/2026-11-11-los24-bootfix/F0-FLASH-BUNDLE.md`; `out/2026-11-11-los24-bootfix/FLASH-CHECKLIST.md`; `out/2026-11-11-los24-bootfix/F0-ACCEPTANCE-CHECKLIST.md`; `out/2026-11-11-los24-bootfix/MORNING-RUNBOOK.md`; `out/2026-11-10-los24-logdump/RESTORE-RUNBOOK.md`; `out/2026-11-10-los24-logdump/LOS24-PLAYBOOK-CONSOLIDATED.md` (§3.1–§3.6); `refs/readback-full/` |
 
-> **Read this first.** This document is a record of what was done and verified on one physical unit. Flashing can brick the device, erase `/data`, or trip anti-rollback if the wrong package is used. Before writing anything: identify the partition and LUN, confirm the image SHA-256, and know your rollback anchor. Never trust an EDL `SUCCESS` message — the only proof of a write is a read-back hash or a content fingerprint.
+> **Read this first.** This guide records steps verified on one physical unit. Flashing can brick the device, erase `/data`, or trip anti-rollback if the wrong package is used. Before writing anything: identify the partition and LUN, confirm the image SHA-256, and know your rollback anchor. Never trust an EDL `SUCCESS` message — the only proof of a write is a read-back hash or a content fingerprint.
 
 ## 1. Write-channel capability matrix (measured on this device)
 
 | Channel | LUN0 | LUN4 | Notes / evidence |
 |---|---|---|---|
-| Bootloader fastboot (`is-userspace=no`) | ❌ read-only | ❌ read-only | only `getvar` / `reboot` / `reboot recovery`; `flash` returns `remote: 'unknown command'`; `oem edl` also unknown |
-| fastbootd (`is-userspace=yes`) | ✅ `super` and logical partitions | ✅ `vbmeta_b`, `init_boot_b`, … | entered by `adb reboot fastboot` / `fastboot reboot fastboot` from a bootable system or recovery; auto-sparse transport, 13 GB ≈ 20 s class |
-| recovery `dd` | ✅ | ✅ | any physical/logical partition via `/dev/block/by-name/*`; verified by SHA-256 read-back |
-| EDL + `fh_loader` (2026-11-10+ form) | ✅ | ✅ | requires `--zlpawarehost=1` and XML with `label` / `partofsingleimage=false` / `readbackverify=false`; write then read back and compare |
-| EDL old form (no `--zlpawarehost`, bare LBA) | partial | ❌ fake success | prints `{All Finished Successfully}` after `ERROR: invalid gpt entry number 128` — do not use |
-| EDL read | ⚠️ fake-success history | ⚠️ fake-success history | use only with two independent reads / content fingerprints |
-| GeekFlashTool (full package) | ✅ | ✅ | only "one-click back to stock" history; once corrupted the LUN0 backup GPT (5-sector bug) |
-| `adb reboot edl` (soft EDL) | ❌ | ❌ | lands in a 9008 that does not answer Sahara; writes are silently dropped |
+| Bootloader fastboot (`is-userspace=no`) | read-only | read-only | only `getvar` / `reboot` / `reboot recovery`; `flash` returns `remote: 'unknown command'`; `oem edl` also unknown |
+| fastbootd (`is-userspace=yes`) | `super` and logical partitions | `vbmeta_b`, `init_boot_b`, … | entered by `adb reboot fastboot` / `fastboot reboot fastboot` from a bootable system or recovery; auto-sparse transport, 13 GB ≈ 20 s class |
+| recovery `dd` | Yes | | any physical/logical partition via `/dev/block/by-name/*`; verified by SHA-256 read-back |
+| EDL + `fh_loader` (2026-11-10+ form) | Yes | | requires `--zlpawarehost=1` and XML with `label` / `partofsingleimage=false` / `readbackverify=false`; write then read back and compare |
+| EDL old form (no `--zlpawarehost`, bare LBA) | partial | fake success | prints `{All Finished Successfully}` after `ERROR: invalid gpt entry number 128` — do not use |
+| EDL read | fake-success history | fake-success history | use only with two independent reads / content fingerprints |
+| GeekFlashTool (full package) | Yes | | only "one-click back to stock" history; once corrupted the LUN0 backup GPT (5-sector bug) |
+| `adb reboot edl` (soft EDL) | No | | lands in a 9008 that does not answer Sahara; writes are silently dropped |
 
 **One-tool rule:** only one host tool may own the 9008 port at a time; a GUI tool holding COM3 must be closed and the cable re-plugged to re-enter EDL. Only one Sahara/programmer handshake is allowed per EDL entry.
 
@@ -201,18 +201,18 @@ The stock boot chain requires exactly this set (parsed from the stock `vbmeta_b`
 
 | # | Partition | LUN | LBA (4 KiB) | Sectors | Bytes | Stock file | SHA-256 | Channel |
 |---|---|---|---|---|---|---|---|---|
-| 1 | `super` (all 7 LP inside) | 0 | 8968 | 5,242,880 | 21,474,836,480 | `super.img` | `78e54bd36dc1d6971d338ffb49670c6809cad36ca16f6004d0b281af331cf4e5` | EDL ✅ |
-| 2 | `vbmeta_system_b` | 0 | 5251864 | 16 | 65,536 | `vbmeta_system_b.img` | `493448e6…0399b` | EDL ✅ |
-| 3 | `dataext_b` | 0 | 5530408 | 131,072 | 536,870,912 | `dataext_b.img` | `e231c8c7…ac86fb` | EDL ✅ |
-| 4 | `vbmeta_b` | 4 | 513634 | 16 | 65,536 | `vbmeta_b.img` | `ae4ebd619bb57c0d4f50e6619d1a5937bc805b8eaff90f83becdf2631dbf54d7` | EDL ✅ |
-| 5 | `boot_b` | 4 | 489006 | 24,576 | 100,663,296 | `boot_b.img` | `2731d62ca182c811ed51e4c4e33fe22da4191218569499cdb7debf793c072bec` | EDL ✅ |
-| 6 | `dtbo_b` | 4 | 513650 | 18,432 | 75,497,472 | `dtbo_b.img` | `6cdc8d3b…239db49` | EDL ✅ |
-| 7 | `vendor_boot_b` | 4 | 672238 | 24,576 | 100,663,296 | `vendor_boot_b.img` | `9349137dc262ab61508014275b623f4d39e5b14bc55c77082848d63a28f381b2` | EDL ✅ |
-| 8 | `recovery_b` | 4 | 696878 | 25,600 | 104,857,600 | `recovery_b.img` | `a3b34a80…62acea0` | EDL ✅ |
-| 9 | `init_boot_b` (vbmeta_system hash) | 4 | 722990 | 2,048 | 8,388,608 | `init_boot_b.img` | `a31072c0b26f5df8581e2f23e9a39cb8476c00b2b9f251c701db433141653e68` | EDL ✅ |
-| 10 | `pvmfw_b` (vbmeta_system hash) | 4 | 725054 | 256 | 1,048,576 | `pvmfw_b.img` | `d24b59dc…affc98` | EDL ✅ |
-| 11 | `metadata` (optional, **not written by default**) | 0 | 5251880 | 16,384 | 67,108,864 | `metadata.img` | `7c043a52…f292ba4c` | EDL ✅ |
-| 12 | `misc` (optional, **not written by default**) | 0 | 8456 | 256 | 1,048,576 | `misc.img` | `5c90f3ad…7a25fe` | EDL ✅ |
+| 1 | `super` (all 7 LP inside) | 0 | 8968 | 5,242,880 | 21,474,836,480 | `super.img` | `78e54bd36dc1d6971d338ffb49670c6809cad36ca16f6004d0b281af331cf4e5` | EDL |
+| 2 | `vbmeta_system_b` | 0 | 5251864 | 16 | 65,536 | `vbmeta_system_b.img` | `493448e6…0399b` | EDL |
+| 3 | `dataext_b` | 0 | 5530408 | 131,072 | 536,870,912 | `dataext_b.img` | `e231c8c7…ac86fb` | EDL |
+| 4 | `vbmeta_b` | 4 | 513634 | 16 | 65,536 | `vbmeta_b.img` | `ae4ebd619bb57c0d4f50e6619d1a5937bc805b8eaff90f83becdf2631dbf54d7` | EDL |
+| 5 | `boot_b` | 4 | 489006 | 24,576 | 100,663,296 | `boot_b.img` | `2731d62ca182c811ed51e4c4e33fe22da4191218569499cdb7debf793c072bec` | EDL |
+| 6 | `dtbo_b` | 4 | 513650 | 18,432 | 75,497,472 | `dtbo_b.img` | `6cdc8d3b…239db49` | EDL |
+| 7 | `vendor_boot_b` | 4 | 672238 | 24,576 | 100,663,296 | `vendor_boot_b.img` | `9349137dc262ab61508014275b623f4d39e5b14bc55c77082848d63a28f381b2` | EDL |
+| 8 | `recovery_b` | 4 | 696878 | 25,600 | 104,857,600 | `recovery_b.img` | `a3b34a80…62acea0` | EDL |
+| 9 | `init_boot_b` (vbmeta_system hash) | 4 | 722990 | 2,048 | 8,388,608 | `init_boot_b.img` | `a31072c0b26f5df8581e2f23e9a39cb8476c00b2b9f251c701db433141653e68` | EDL |
+| 10 | `pvmfw_b` (vbmeta_system hash) | 4 | 725054 | 256 | 1,048,576 | `pvmfw_b.img` | `d24b59dc…affc98` | EDL |
+| 11 | `metadata` (optional, **not written by default**) | 0 | 5251880 | 16,384 | 67,108,864 | `metadata.img` | `7c043a52…f292ba4c` | EDL |
+| 12 | `misc` (optional, **not written by default**) | 0 | 8456 | 256 | 1,048,576 | `misc.img` | `5c90f3ad…7a25fe` | EDL |
 
 - Stock `super` SHA-256: `78e54bd3…cf4e5`; its first 64 KiB SHA-256 = `fc0163625355ffd46479d9a6c671187a3879954d43cb3c2cf46407dc3b68c573` (LP metadata unchanged after content patching).
 - `metadata` / `misc` are optional: stock `metadata` is a 2026-10-06 snapshot that may conflict with current `/data`; `misc` BCB is currently empty and writing it does not change slot selection.

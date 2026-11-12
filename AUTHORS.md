@@ -25,6 +25,4 @@ welcome to open issues and pull requests; see `CONTRIBUTING.md`.
 ## Note / 说明
 
 All technical records were produced and reviewed by the maintainer on real
-hardware; the AI assistant is credited as a collaboration tool, not as a
-copyright holder. / 所有技术记录均由维护者在真机上实测与复核；AI 助理作为协作
-工具署名，不作为版权方。
+hardware. / 所有技术记录均由维护者在真机上实测与复核。

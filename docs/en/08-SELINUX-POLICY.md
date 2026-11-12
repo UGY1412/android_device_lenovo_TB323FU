@@ -1,6 +1,6 @@
 Author/Maintainer: krollv, @DeepSeek V4.1 Flash 1017
 Copyright (C) 2026 自恋也是种美 (krollv)
-License: Apache-2.0 (original text)
+License: Apache-2.0
 
 # 08 — SELinux: precompiled-policy checksum mismatch and the 4 KiB policy-sector patch
 
@@ -95,7 +95,7 @@ Idea: make `FindPrecompiledSplitPolicy()` believe the precompiled policy matches
 - Written by EDL at LBA 701,429 during the 22:39 flashing step (together with `vendor_boot_diag2.img`); recorded in the flashing fact table (`BOOTFIX-FACTS.md`). This changed `system_b` content by exactly one 4 KiB sector, so `system_b` no longer equals `super_v7.img`'s replacement image as a whole (the whole-`super` SHA `5779a9a5…` no longer applies once this sector is patched).
 - After the write and `power reset`, at **22:40** adb first enumerated the LineageOS user space (`watch-boot.log:131`, 18.4 s after watch start). The boot log of the previous attempt (22:35) had stopped at `Compiling SELinux policy`, i.e. the compile step was the last observed activity; with the patch the boot went past it.
 - At **22:48–22:50**, after flashing LOS `product_b`/`system_ext_b` (22:45/22:46) and `fastboot -w`, the user visually reached the LineageOS welcome screen.
-- **Honest caveat**: the 22:39 step changed more than one variable (`vendor_boot_diag2` + policy sector + subsequent product/system_ext replacement). The patch's causal role (skip the failing compile) is supported by offline compile data and by the 22:35 vs. 22:40 boot logs, but it was not isolated as a single-variable on-device test.
+- **Caveat**: the 22:39 step changed more than one variable (`vendor_boot_diag2` + policy sector + subsequent product/system_ext replacement). The patch's causal role (skip the failing compile) is supported by offline compile data and by the 22:35 vs. 22:40 boot logs, but it was not isolated as a single-variable on-device test.
 
 ## 5. The proper fix: flash LOS `product`/`system_ext`
 

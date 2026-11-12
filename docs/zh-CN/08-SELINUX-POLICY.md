@@ -95,7 +95,7 @@ Failed to compile cildb: -2
 - 22:39 的刷写步骤中经 EDL 写入 LBA 701,429（与 `vendor_boot_diag2.img` 同一批）；记录见刷写事实表（`BOOTFIX-FACTS.md`）。这一写使 `system_b` 内容恰好变了一个 4 KiB 扇区，因此 `system_b` 不再等同 `super_v7.img` 的替换件整体（打过该扇区后，整件 `super` sha `5779a9a5…` 不再适用）。
 - 写入并 `power reset` 后，**22:40** adb 首次枚举到 LineageOS 用户态（`watch-boot.log:131`，watch 起 18.4 s）。上一次启动（22:35）的日志停在 `Compiling SELinux policy`，即编译步骤是最后观测到的活动；打补丁后启动越过了它。
 - **22:48–22:50**，在刷入 LOS `product_b`/`system_ext_b`（22:45/22:46）并 `fastboot -w` 之后，用户目视进入 LineageOS 欢迎界面。
-- **诚实 caveat**：22:39 那一步改的不止一个变量（`vendor_boot_diag2` + policy 扇区 + 后续 product/system_ext 替换）。补丁的因果作用（跳过失败的编译）由离线编译数据与 22:35/22:40 两次启动日志支撑，但**未作为单变量真机测试隔离验证**。
+- **注意**：22:39 那一步改的不止一个变量（`vendor_boot_diag2` + policy 扇区 + 后续 product/system_ext 替换）。补丁的因果作用（跳过失败的编译）由离线编译数据与 22:35/22:40 两次启动日志支撑，但**未作为单变量真机测试隔离验证**。
 
 ## 5. 正确解法：刷入 LOS `product`/`system_ext`
 

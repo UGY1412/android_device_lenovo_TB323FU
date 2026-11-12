@@ -1,6 +1,6 @@
 Author/Maintainer: krollv, @DeepSeek V4.1 Flash 1017
 Copyright (C) 2026 自恋也是种美 (krollv)
-License: Apache-2.0 (original text)
+License: Apache-2.0
 
 # 06 — Root cause: `logdump.sh` `dd`-writes `/metadata` on every boot → `init_user0_failed` → forced data wipe
 

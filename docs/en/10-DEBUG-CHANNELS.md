@@ -1,6 +1,6 @@
 Author/Maintainer: krollv, @DeepSeek V4.1 Flash 1017
 Copyright (C) 2026 自恋也是种美 (krollv)
-License: Apache-2.0 (original text)
+License: Apache-2.0
 
 # 10 — Debug & Log Capture Channels (Lenovo Legion Y700 5th Gen, TB323FU)
 
@@ -20,17 +20,17 @@ License: Apache-2.0 (original text)
 
 | Channel | Read | Write | Persistent? | Best use | Main caveat |
 |---|---|---|---|---|---|
-| Hardware EDL / 9008 (`fh_loader`) | ✅ LUN0 + LUN4 | ✅ LUN0 + LUN4 (new XML style only) | n/a | Full partition read/write, GPT repair, brick recovery, pulling `misc`/`logdump`/`metadata` | False success; each write must be read back; one tool per 9008 session; cold entry only |
-| fastbootd (`is-userspace=yes`) | ✅ `fastboot fetch` | ✅ physical + logical partitions | n/a | Fast large writes (`super`, `system`), `fetch` without EDL, `set_active` | Only reachable from a bootable system/recovery; partition names have no `_b` suffix |
-| Bootloader fastboot (`is-userspace=no`) | ✅ `getvar` only | ❌ | n/a | Slot/var probes, `reboot`/`reboot recovery` | `flash`/`set_active`/`oem edl` = `unknown command` |
-| Stock recovery (adb) | ✅ | ✅ `dd` to raw partitions | n/a | Fallback read/write, factory reset | A recovery boot **skips first-stage mounts** and uses a monolithic `/sepolicy`; not a normal-boot debugging environment |
-| `adb` (system userspace) | ✅ | ⚠️ only when authorized | n/a | `logcat`/`dmesg`/`getprop`/`ps`, last-resort capture | Authorization state is stored in `/data/misc/adb/adb_keys`; a data wipe de-authorizes the host |
-| pstore / ramoops / last_kmsg | ❌ | — | — | — | No ramoops DT node; `dtb_size=0`; VT/FB off; EFI pstore has no records (failures are not panic-type) |
-| `logfs` (ABL log) | ❌ | — | — | — | Zeroed/handled by tools earlier in the project; FAT destroyed, contains stale sessions only |
-| `misc` beacon (init wrapper) | ✅ | ✅ via wrapper | overwritten every boot | Earliest boot-stage evidence (first-stage init) | Only small control block + up to 508 KiB streaming buffer |
-| `logdump` partition (INITLOG13) | ✅ | ✅ via wrapper | per boot (wrap) | Full `/dev/kmsg` stream, 512 MiB | Not covered by any AVB descriptor (safe to write); must be fetched after the failure |
-| `rawdump` partition (logcat service) | ✅ | ✅ via service | per boot | logcat/crash buffer when the UI is up | Service starts late (`class core`/`post-fs-data`); early crashes are missed |
-| `metadata` partition as capture target | ✅ | ❌ **forbidden** | per boot | — | The pre-F0 `logdump.sh` wrote raw blocks into it and destroyed the f2fs superblock; this caused the `init_user0_failed` loop |
+| Hardware EDL / 9008 (`fh_loader`) | LUN0 + LUN4 | LUN0 + LUN4 (new XML style only) | n/a | Full partition read/write, GPT repair, brick recovery, pulling `misc`/`logdump`/`metadata` | False success; each write must be read back; one tool per 9008 session; cold entry only |
+| fastbootd (`is-userspace=yes`) | `fastboot fetch` | physical + logical partitions | n/a | Fast large writes (`super`, `system`), `fetch` without EDL, `set_active` | Only reachable from a bootable system/recovery; partition names have no `_b` suffix |
+| Bootloader fastboot (`is-userspace=no`) | `getvar` only | No | n/a | Slot/var probes, `reboot`/`reboot recovery` | `flash`/`set_active`/`oem edl` = `unknown command` |
+| Stock recovery (adb) | Yes | `dd` to raw partitions | n/a | Fallback read/write, factory reset | A recovery boot **skips first-stage mounts** and uses a monolithic `/sepolicy`; not a normal-boot debugging environment |
+| `adb` (system userspace) | Yes | only when authorized | n/a | `logcat`/`dmesg`/`getprop`/`ps`, last-resort capture | Authorization state is stored in `/data/misc/adb/adb_keys`; a data wipe de-authorizes the host |
+| pstore / ramoops / last_kmsg | No | — | — | — | No ramoops DT node; `dtb_size=0`; VT/FB off; EFI pstore has no records (failures are not panic-type) |
+| `logfs` (ABL log) | No | — | — | — | Zeroed/handled by tools earlier in the project; FAT destroyed, contains stale sessions only |
+| `misc` beacon (init wrapper) | Yes | via wrapper | overwritten every boot | Earliest boot-stage evidence (first-stage init) | Only small control block + up to 508 KiB streaming buffer |
+| `logdump` partition (INITLOG13) | Yes | via wrapper | per boot (wrap) | Full `/dev/kmsg` stream, 512 MiB | Not covered by any AVB descriptor (safe to write); must be fetched after the failure |
+| `rawdump` partition (logcat service) | Yes | via service | per boot | logcat/crash buffer when the UI is up | Service starts late (`class core`/`post-fs-data`); early crashes are missed |
+| `metadata` partition as capture target | Yes | **forbidden** | per boot | — | The pre-F0 `logdump.sh` wrote raw blocks into it and destroyed the f2fs superblock; this caused the `init_user0_failed` loop |
 
 ---
 

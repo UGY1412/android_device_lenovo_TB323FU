@@ -20,17 +20,17 @@ Copyright (C) 2026 自恋也是种美 (krollv)
 
 | 通道 | 读 | 写 | 持久性 | 主要用途 | 主要坑 |
 |---|---|---|---|---|---|
-| 硬件 EDL / 9008（`fh_loader`） | ✅ LUN0 + LUN4 | ✅ LUN0 + LUN4（仅新 XML 写法） | 不适用 | 全分区读写、GPT 修复、救砖、取 `misc`/`logdump`/`metadata` | 会假成功；每次写后必须回读；同一 9008 会话只用一个工具；只能冷进 |
-| fastbootd（`is-userspace=yes`） | ✅ `fastboot fetch` | ✅ 物理 + 逻辑分区 | 不适用 | 快速大文件写入（`super`、`system`）、免 EDL 读分区、`set_active` | 只能从可启动系统/原厂 recovery 进入；分区名不带 `_b` 后缀 |
-| Bootloader fastboot（`is-userspace=no`） | ✅ 仅 `getvar` | ❌ | 不适用 | 查槽位/变量、`reboot`/`reboot recovery` | `flash`/`set_active`/`oem edl` 全是 `unknown command` |
-| 原厂 recovery（adb） | ✅ | ✅ 可 `dd` 原始分区 | 不适用 | 兜底读写、factory reset | recovery 引导会**跳过首阶段挂载**并使用 monolithic `/sepolicy`，不是正常启动的调试环境 |
-| 系统 `adb` | ✅ | ⚠️ 需已授权 | 不适用 | `logcat`/`dmesg`/`getprop`/`ps`、最后手段取证 | 授权状态存在 `/data/misc/adb/adb_keys`，清 data 后主机需重新授权 |
-| pstore / ramoops / last_kmsg | ❌ | — | — | — | 无 ramoops DT 节点；`dtb_size=0`；VT/FB 关闭；EFI pstore 无记录（失败非 panic 型） |
-| `logfs`（ABL 日志） | ❌ | — | — | — | 本机早前已被清零，FAT 损坏，只剩陈旧会话 |
-| `misc` beacon（init 包装器） | ✅ | ✅ 由包装器写 | 每次启动覆盖 | 最早期的启动阶段证据（first-stage init） | 只有很小的控制块 + 最多 508 KiB 流式缓冲 |
-| `logdump` 分区（INITLOG13） | ✅ | ✅ 由包装器写 | 每次启动（可回绕） | 完整 `/dev/kmsg` 流，512 MiB | 不在任何 AVB 描述符内（可安全写）；故障后必须取回 |
-| `rawdump` 分区（logcat 服务） | ✅ | ✅ 由服务写 | 每次启动 | 用户态起来后的 logcat/crash buffer | 服务起得晚（`class core`/`post-fs-data`），早期崩溃会漏 |
-| `metadata` 分区当捕获目标 | ✅ | ❌ **禁止** | 每次启动 | — | F0 前的 `logdump.sh` 往它里面裸写块，毁了 f2fs 超级块，制造了 `init_user0_failed` 循环 |
+| 硬件 EDL / 9008（`fh_loader`） | LUN0 + LUN4 | LUN0 + LUN4（仅新 XML 写法） | 不适用 | 全分区读写、GPT 修复、救砖、取 `misc`/`logdump`/`metadata` | 会假成功；每次写后必须回读；同一 9008 会话只用一个工具；只能冷进 |
+| fastbootd（`is-userspace=yes`） | `fastboot fetch` | 物理 + 逻辑分区 | 不适用 | 快速大文件写入（`super`、`system`）、免 EDL 读分区、`set_active` | 只能从可启动系统/原厂 recovery 进入；分区名不带 `_b` 后缀 |
+| Bootloader fastboot（`is-userspace=no`） | 仅 `getvar` | No | 不适用 | 查槽位/变量、`reboot`/`reboot recovery` | `flash`/`set_active`/`oem edl` 全是 `unknown command` |
+| 原厂 recovery（adb） | Yes | 可 `dd` 原始分区 | 不适用 | 兜底读写、factory reset | recovery 引导会**跳过首阶段挂载**并使用 monolithic `/sepolicy`，不是正常启动的调试环境 |
+| 系统 `adb` | Yes | 需已授权 | 不适用 | `logcat`/`dmesg`/`getprop`/`ps`、最后手段取证 | 授权状态存在 `/data/misc/adb/adb_keys`，清 data 后主机需重新授权 |
+| pstore / ramoops / last_kmsg | No | — | — | — | 无 ramoops DT 节点；`dtb_size=0`；VT/FB 关闭；EFI pstore 无记录（失败非 panic 型） |
+| `logfs`（ABL 日志） | No | — | — | — | 本机早前已被清零，FAT 损坏，只剩陈旧会话 |
+| `misc` beacon（init 包装器） | Yes | 由包装器写 | 每次启动覆盖 | 最早期的启动阶段证据（first-stage init） | 只有很小的控制块 + 最多 508 KiB 流式缓冲 |
+| `logdump` 分区（INITLOG13） | Yes | 由包装器写 | 每次启动（可回绕） | 完整 `/dev/kmsg` 流，512 MiB | 不在任何 AVB 描述符内（可安全写）；故障后必须取回 |
+| `rawdump` 分区（logcat 服务） | Yes | 由服务写 | 每次启动 | 用户态起来后的 logcat/crash buffer | 服务起得晚（`class core`/`post-fs-data`），早期崩溃会漏 |
+| `metadata` 分区当捕获目标 | Yes | **禁止** | 每次启动 | — | F0 前的 `logdump.sh` 往它里面裸写块，毁了 f2fs 超级块，制造了 `init_user0_failed` 循环 |
 
 ---
 

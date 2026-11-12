@@ -17,14 +17,14 @@ Copyright (C) 2026 自恋也是种美 (krollv)
 
 | 通道 | LUN0 | LUN4 | 说明 / 证据 |
 |---|---|---|---|
-| Bootloader fastboot（`is-userspace=no`） | ❌ 只读 | ❌ 只读 | 仅 `getvar` / `reboot` / `reboot recovery`；`flash` 返回 `remote: 'unknown command'`；`oem edl` 同样 unknown |
-| fastbootd（`is-userspace=yes`） | ✅ `super` 与逻辑分区 | ✅ `vbmeta_b`、`init_boot_b` 等 | 从可启动系统或 recovery 用 `adb reboot fastboot` / `fastboot reboot fastboot` 进入；自动 sparse 传输，13 GB 约 20 s 级 |
-| recovery `dd` | ✅ | ✅ | 可写任意物理/逻辑分区，路径 `/dev/block/by-name/*`；已用 SHA-256 回读验证 |
-| EDL + `fh_loader`（2026-11-10 起写法） | ✅ | ✅ | 需 `--zlpawarehost=1`，XML 带 `label` / `partofsingleimage=false` / `readbackverify=false`；写后回读比对 |
-| EDL 旧写法（无 `--zlpawarehost`、裸 LBA） | 部分 | ❌ 假成功 | `ERROR: invalid gpt entry number 128` 之后仍打印 `{All Finished Successfully}`——不要用 |
-| EDL 读 | ⚠️ 有假成功史 | ⚠️ 有假成功史 | 只能作为辅助，需两次独立回读 / 内容指纹互证 |
-| GeekFlashTool（全量包） | ✅ | ✅ | 历史上唯一「一键回原厂」通道；曾写坏 LUN0 备份 GPT（5 扇区 bug） |
-| `adb reboot edl`（软 EDL） | ❌ | ❌ | 进入的是不应答 Sahara 的 9008；写入被静默丢弃 |
+| Bootloader fastboot（`is-userspace=no`） | 只读 | 只读 | 仅 `getvar` / `reboot` / `reboot recovery`；`flash` 返回 `remote: 'unknown command'`；`oem edl` 同样 unknown |
+| fastbootd（`is-userspace=yes`） | `super` 与逻辑分区 | `vbmeta_b`、`init_boot_b` 等 | 从可启动系统或 recovery 用 `adb reboot fastboot` / `fastboot reboot fastboot` 进入；自动 sparse 传输，13 GB 约 20 s 级 |
+| recovery `dd` | Yes | | 可写任意物理/逻辑分区，路径 `/dev/block/by-name/*`；已用 SHA-256 回读验证 |
+| EDL + `fh_loader`（2026-11-10 起写法） | Yes | | 需 `--zlpawarehost=1`，XML 带 `label` / `partofsingleimage=false` / `readbackverify=false`；写后回读比对 |
+| EDL 旧写法（无 `--zlpawarehost`、裸 LBA） | 部分 | 假成功 | `ERROR: invalid gpt entry number 128` 之后仍打印 `{All Finished Successfully}`——不要用 |
+| EDL 读 | 有假成功史 | 有假成功史 | 只能作为辅助，需两次独立回读 / 内容指纹互证 |
+| GeekFlashTool（全量包） | Yes | | 历史上唯一「一键回原厂」通道；曾写坏 LUN0 备份 GPT（5 扇区 bug） |
+| `adb reboot edl`（软 EDL） | No | | 进入的是不应答 Sahara 的 9008；写入被静默丢弃 |
 
 **单工具铁律：** 同一时刻只允许一个主机工具占用 9008 端口；GUI 工具占住 COM3 时必须关闭并重新插拔进 EDL。每次进入 EDL 只允许一次 Sahara/programmer 握手。
 
@@ -201,18 +201,18 @@ fastboot reboot
 
 | # | 分区 | LUN | LBA（4 KiB） | 扇区数 | 字节数 | 原厂文件 | SHA-256 | 通道 |
 |---|---|---|---|---|---|---|---|---|
-| 1 | `super`（内含全部 7 个 LP） | 0 | 8968 | 5,242,880 | 21,474,836,480 | `super.img` | `78e54bd36dc1d6971d338ffb49670c6809cad36ca16f6004d0b281af331cf4e5` | EDL ✅ |
-| 2 | `vbmeta_system_b` | 0 | 5251864 | 16 | 65,536 | `vbmeta_system_b.img` | `493448e6…0399b` | EDL ✅ |
-| 3 | `dataext_b` | 0 | 5530408 | 131,072 | 536,870,912 | `dataext_b.img` | `e231c8c7…ac86fb` | EDL ✅ |
-| 4 | `vbmeta_b` | 4 | 513634 | 16 | 65,536 | `vbmeta_b.img` | `ae4ebd619bb57c0d4f50e6619d1a5937bc805b8eaff90f83becdf2631dbf54d7` | EDL ✅ |
-| 5 | `boot_b` | 4 | 489006 | 24,576 | 100,663,296 | `boot_b.img` | `2731d62ca182c811ed51e4c4e33fe22da4191218569499cdb7debf793c072bec` | EDL ✅ |
-| 6 | `dtbo_b` | 4 | 513650 | 18,432 | 75,497,472 | `dtbo_b.img` | `6cdc8d3b…239db49` | EDL ✅ |
-| 7 | `vendor_boot_b` | 4 | 672238 | 24,576 | 100,663,296 | `vendor_boot_b.img` | `9349137dc262ab61508014275b623f4d39e5b14bc55c77082848d63a28f381b2` | EDL ✅ |
-| 8 | `recovery_b` | 4 | 696878 | 25,600 | 104,857,600 | `recovery_b.img` | `a3b34a80…62acea0` | EDL ✅ |
-| 9 | `init_boot_b`（vbmeta_system hash） | 4 | 722990 | 2,048 | 8,388,608 | `init_boot_b.img` | `a31072c0b26f5df8581e2f23e9a39cb8476c00b2b9f251c701db433141653e68` | EDL ✅ |
-| 10 | `pvmfw_b`（vbmeta_system hash） | 4 | 725054 | 256 | 1,048,576 | `pvmfw_b.img` | `d24b59dc…affc98` | EDL ✅ |
-| 11 | `metadata`（可选，**默认不写**） | 0 | 5251880 | 16,384 | 67,108,864 | `metadata.img` | `7c043a52…f292ba4c` | EDL ✅ |
-| 12 | `misc`（可选，**默认不写**） | 0 | 8456 | 256 | 1,048,576 | `misc.img` | `5c90f3ad…7a25fe` | EDL ✅ |
+| 1 | `super`（内含全部 7 个 LP） | 0 | 8968 | 5,242,880 | 21,474,836,480 | `super.img` | `78e54bd36dc1d6971d338ffb49670c6809cad36ca16f6004d0b281af331cf4e5` | EDL |
+| 2 | `vbmeta_system_b` | 0 | 5251864 | 16 | 65,536 | `vbmeta_system_b.img` | `493448e6…0399b` | EDL |
+| 3 | `dataext_b` | 0 | 5530408 | 131,072 | 536,870,912 | `dataext_b.img` | `e231c8c7…ac86fb` | EDL |
+| 4 | `vbmeta_b` | 4 | 513634 | 16 | 65,536 | `vbmeta_b.img` | `ae4ebd619bb57c0d4f50e6619d1a5937bc805b8eaff90f83becdf2631dbf54d7` | EDL |
+| 5 | `boot_b` | 4 | 489006 | 24,576 | 100,663,296 | `boot_b.img` | `2731d62ca182c811ed51e4c4e33fe22da4191218569499cdb7debf793c072bec` | EDL |
+| 6 | `dtbo_b` | 4 | 513650 | 18,432 | 75,497,472 | `dtbo_b.img` | `6cdc8d3b…239db49` | EDL |
+| 7 | `vendor_boot_b` | 4 | 672238 | 24,576 | 100,663,296 | `vendor_boot_b.img` | `9349137dc262ab61508014275b623f4d39e5b14bc55c77082848d63a28f381b2` | EDL |
+| 8 | `recovery_b` | 4 | 696878 | 25,600 | 104,857,600 | `recovery_b.img` | `a3b34a80…62acea0` | EDL |
+| 9 | `init_boot_b`（vbmeta_system hash） | 4 | 722990 | 2,048 | 8,388,608 | `init_boot_b.img` | `a31072c0b26f5df8581e2f23e9a39cb8476c00b2b9f251c701db433141653e68` | EDL |
+| 10 | `pvmfw_b`（vbmeta_system hash） | 4 | 725054 | 256 | 1,048,576 | `pvmfw_b.img` | `d24b59dc…affc98` | EDL |
+| 11 | `metadata`（可选，**默认不写**） | 0 | 5251880 | 16,384 | 67,108,864 | `metadata.img` | `7c043a52…f292ba4c` | EDL |
+| 12 | `misc`（可选，**默认不写**） | 0 | 8456 | 256 | 1,048,576 | `misc.img` | `5c90f3ad…7a25fe` | EDL |
 
 - 原厂 `super` SHA-256：`78e54bd3…cf4e5`；其前 64 KiB SHA-256 = `fc0163625355ffd46479d9a6c671187a3879954d43cb3c2cf46407dc3b68c573`（内容修补后 LP 元数据不变）。
 - `metadata` / `misc` 为可选：原厂 `metadata` 是 2026-10-06 的快照，可能与当前 `/data` 冲突；`misc` 当前 BCB 为空，写它不会改变槽位选择。

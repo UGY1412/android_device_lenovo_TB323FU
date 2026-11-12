@@ -16,12 +16,12 @@ investigations that were required to make LineageOS boot on this device.
 
 | Item | Status |
 |---|---|
-| Build (LineageOS 24.0, `lineage_TB323FU-cp2a-userdebug`) | ✅ buildable, images verified |
-| First boot | ✅ boots to LineageOS home screen |
-| Reboot stability | ✅ 3/3 consecutive reboots passed (`sys.boot_completed=1`) |
-| /data file-based encryption (FBE) | ✅ `ro.crypto.state=encrypted`, `type=file` |
-| Hardware functions | ⚠️ partly unverified — see [04-HARDWARE-SUPPORT](docs/en/04-HARDWARE-SUPPORT.md) |
-| Current build state | ⚠️ debug/bring-up state (SELinux permissive, dm-verity off, test-keys, verbose boot logging) — see [04](docs/en/04-HARDWARE-SUPPORT.md) |
+| Build (LineageOS 24.0, `lineage_TB323FU-cp2a-userdebug`) | buildable, images verified |
+| First boot | boots to LineageOS home screen |
+| Reboot stability | 3/3 consecutive reboots passed (`sys.boot_completed=1`) |
+| /data file-based encryption (FBE) | `ro.crypto.state=encrypted`, `type=file` |
+| Hardware functions | partly unverified — see [04-HARDWARE-SUPPORT](docs/en/04-HARDWARE-SUPPORT.md) |
+| Current build state | debug/bring-up state (SELinux permissive, dm-verity off, test-keys, verbose boot logging) — see [04](docs/en/04-HARDWARE-SUPPORT.md) |
 
 This is a **porting base**, not a release ROM. Expect device-specific bugs and
 read the docs before flashing.

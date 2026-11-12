@@ -1,6 +1,6 @@
 Author/Maintainer: krollv, @DeepSeek V4.1 Flash 1017
 Copyright (C) 2026 自恋也是种美 (krollv)
-License: Apache-2.0 (original text)
+License: Apache-2.0
 
 # 01 · Device Facts — Lenovo Legion Y700 Gen 5 (TB323FU)
 
@@ -11,7 +11,7 @@ License: Apache-2.0 (original text)
 | Scope | Hardware/platform identity, stock firmware baseline, partition/LUN geometry, slot state, AVB boot chain, and the "what is actually on the device now" baseline |
 | Evidence sources | `out/2026-11-12-edl-f0/F0-ACCEPTANCE-REPORT.md`; `CURRENT-STATE.md` (§1/§4/§9); `out/2026-11-11-los24-bootfix/FLASH-CHECKLIST.md`; `out/2026-11-10-los24-logdump/RESTORE-RUNBOOK.md`; `out/2026-11-10-los24-logdump/restore-map.tsv`; `work/research/B-tb323fu-hardware.md`; `out/2026-11-12-edl-f0/device/postflash-final/getprop-final.txt`; `refs/readback-full/`; device-tree `BoardConfig.mk` |
 
-> **Conventions used in this document set**
+> **Conventions**
 > - All LBAs are expressed in **4 KiB logical sectors** (`SECTOR_SIZE_IN_BYTES=4096`), matching the GPT and the Qualcomm Firehose tooling used for this device.
 > - SHA-256 values are printed as reported by the source logs; a trailing `…` means the source recorded only the prefix. Full values are given where the source recorded them.
 > - `待验证` / "to be verified" marks a data point that is documented but not yet re-measured on the current build.
@@ -212,7 +212,7 @@ The full feature/HAL matrix is in `04-HARDWARE-SUPPORT.md`. Headline facts:
 | Connectivity | Wi-Fi 7-class QTI WLAN HAL (wlan0, wifi-aware0), Bluetooth A2DP/LE-Audio, GNSS; `ro.vendor.config.lgsi.device.nettype=wifi` |
 | Storage | UFS 4.x class controller; external SD via `8804000.sdhci`; USB-OTG storage via DWC3 |
 
-## 7. Known caveats and pending verification
+## 7. Known limitations and pending verification
 
 1. **Current flash set is a diagnostic state, not a release state**: SELinux permissive, dm-verity off, testkey root vbmeta, `init_boot` = logging13, `system_ext` de-wizarded/auto-provisioned, and a policy-sector patch in `system_b`. See `03-FLASH.md` §8 and the root-cause documents for the cleanup recipe.
 2. **Hardware functionality is not measured yet** — only HAL/service presence at boot is confirmed (F1 test round pending). See `04-HARDWARE-SUPPORT.md`.

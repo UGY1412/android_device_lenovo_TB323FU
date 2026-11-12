@@ -1,6 +1,6 @@
 Author/Maintainer: krollv, @DeepSeek V4.1 Flash 1017
 Copyright (C) 2026 自恋也是种美 (krollv)
-License: Apache-2.0 (original text)
+License: Apache-2.0
 
 # 09 — AVB Chain Notes (Lenovo Legion Y700 5th Gen, TB323FU, LineageOS 24)
 
@@ -11,7 +11,7 @@ License: Apache-2.0 (original text)
 | Scope | Android Verified Boot (AVB) topology of the stock firmware, the tested chain that lets LineageOS 24 boot, what may/must not be modified, how to re-sign images, dm-verity coupling, slot state storage, verification commands |
 | Out of scope | Kernel/DTB changes, firmware flashing rules, SELinux policy content, recovery image internals |
 | Related docs | [01 — Device Facts](01-DEVICE-FACTS.md) (identity/partition geometry), [03 — Flash](03-FLASH.md) (write sets and rollback), [05 — Root cause: /vendor ELOOP](05-ROOTCAUSE-VENDOR-SYMLINK.md), [08 — SELinux](08-SELINUX-POLICY.md), [11 — Error Catalog](11-ERROR-CATALOG.md), [12 — Experiment Log](12-EXPERIMENT-LOG.md) |
-| Evidence policy | Every number is copied from offline image analysis or on-device logs. Claims that were not closed are explicitly marked **UNVERIFIED**. Nothing in this document is a "should work" guess presented as fact. |
+| Evidence policy | Every number is copied from offline image analysis or on-device logs. Claims that were not closed are explicitly marked **UNVERIFIED**. Unverified items are explicitly marked UNVERIFIED. |
 
 > **Path convention.** Evidence paths are written relative to the project root, which is redacted as `<PROJECT_ROOT>`. The build tree is a WSL Ubuntu tree at `/root/los24` (LineageOS 24.0 / Android 17). Serial numbers are shown as `<SN-REDACTED>` and MAC addresses as `<MAC>` throughout this repository.
 

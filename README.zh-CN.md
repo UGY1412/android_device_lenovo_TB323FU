@@ -15,12 +15,12 @@ LineageOS 在本机启动所需的全部根因调查。
 
 | 项 | 状态 |
 |---|---|
-| 构建（LineageOS 24.0，`lineage_TB323FU-cp2a-userdebug`） | ✅ 可构建，镜像已校验 |
-| 首次开机 | ✅ 可进入 LineageOS 桌面 |
-| 重启稳定性 | ✅ 连续 3 次重启全部通过（`sys.boot_completed=1`） |
-| /data 文件级加密（FBE） | ✅ `ro.crypto.state=encrypted`、`type=file` |
-| 硬件功能 | ⚠️ 部分未验证，见 [04-HARDWARE-SUPPORT](docs/zh-CN/04-HARDWARE-SUPPORT.md) |
-| 当前构建形态 | ⚠️ 调试/bring-up 态（SELinux permissive、dm-verity off、test-keys、详细启动日志） |
+| 构建（LineageOS 24.0，`lineage_TB323FU-cp2a-userdebug`） | 可构建，镜像已校验 |
+| 首次开机 | 可进入 LineageOS 桌面 |
+| 重启稳定性 | 连续 3 次重启全部通过（`sys.boot_completed=1`） |
+| /data 文件级加密（FBE） | `ro.crypto.state=encrypted`、`type=file` |
+| 硬件功能 | 部分未验证，见 [04-HARDWARE-SUPPORT](docs/zh-CN/04-HARDWARE-SUPPORT.md) |
+| 当前构建形态 | 调试/bring-up 态（SELinux permissive、dm-verity off、test-keys、详细启动日志） |
 
 这是**移植底座**，不是发布版 ROM；刷机前请先读文档。
 

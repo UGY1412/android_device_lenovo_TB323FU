@@ -190,4 +190,4 @@ Copyright (C) 2026 自恋也是种美 (krollv)
 - `out/2026-11-11-los24-bootfix/VERIFY-REPORT.md` —— `/vendor` ELOOP 根因与独立复核。
 - `out/2026-11-11-los24-bootfix/BOOT-DOCTOR-REVIEW.md` —— 捕获裁决与按 `snap_len` 切分的修正。
 - `out/2026-11-11-los24-bootfix/ADB-ROOT-ANALYSIS.md` —— adb 授权、向导绕过、recovery 引导诊断。
-- `reports/BOOT-SUCCESS-20261111.md`（位于 `<WORKSPACE>/reports/`）—— 2026-11-11 开机轮的时间线还原，含诚实 caveat（`sys.boot_completed` 未直接读到、未做单变量隔离）。
+- `reports/BOOT-SUCCESS-20261111.md`（位于 `<WORKSPACE>/reports/`）—— 2026-11-11 开机轮的时间线还原，含注意（`sys.boot_completed` 未直接读到、未做单变量隔离）。

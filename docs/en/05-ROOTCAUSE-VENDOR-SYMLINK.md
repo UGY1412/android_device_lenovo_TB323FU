@@ -1,6 +1,6 @@
 Author/Maintainer: krollv, @DeepSeek V4.1 Flash 1017
 Copyright (C) 2026 自恋也是种美 (krollv)
-License: Apache-2.0 (original text)
+License: Apache-2.0
 
 # 05 — Root cause: `/vendor` self-referencing symlink loop breaks first-stage mount (ELOOP → `LOG(FATAL)`)
 
@@ -205,9 +205,9 @@ Audit result: 9 segments, **8 byte-identical to stock**, only `system_b` changed
 - **22:40** — first adb user-space enumeration of LineageOS: `Lenovo/lineage_TB323FU/TB323FU:17/CP2A.260605.016/eng.root:userdebug/test-keys`, `slot=_b`, `vbs=orange`.
 - **22:48–22:50** — user visually reaches the LineageOS welcome screen.
 - **2026-11-12 F0 repair set** — the `system` image in the finally accepted set carries the same fixed root layout (plus the logdump removal of doc 06). Final acceptance: `sys.boot_completed=1`, boot animation stopped, FBE `file/encrypted`, `/metadata` and `/data` mounted, and 3/3 consecutive `adb reboot` rounds PASS.
-- Honest caveat: the 22:18 set changed several variables at once (stock GPT restore, `no_fail` fstab, logging wrapper, `vbmeta_system_v8`); no single-variable control was run, so "the `/vendor` fix alone" was not isolated on-device. The structural proof is byte- and source-level, and the fix direction is additionally confirmed by the fact that the stock layout (with `/vendor` as a directory) is exactly what boots. Reproduce with the full known-good set described in the project state notes.
+- Caveat: the 22:18 set changed several variables at once (stock GPT restore, `no_fail` fstab, logging wrapper, `vbmeta_system_v8`); no single-variable control was run, so "the `/vendor` fix alone" was not isolated on-device. The structural proof is byte- and source-level, and the fix direction is additionally confirmed by the fact that the stock layout (with `/vendor` as a directory) is exactly what boots. Reproduce with the full known-good set described in the project state notes.
 
-## 9. Known caveats / unverified
+## 9. Known limitations / unverified
 
 1. The new `/vendor` and `/dataext` directories **have no `security.selinux` xattr**; stock `/vendor` has `u:object_r:vendor_file:s0` and gid 2000, stock `/dataext` has `u:object_r:dataext_file:s0`. This does not block first stage (SELinux is not loaded yet; the directories are covered by their mounted filesystems afterwards), but if a `u:object_r:rootfs`-related denial appears later, add the xattrs.
 2. `/lost+found/2898` keeps the old `/vendor` symlink inode; `e2fsck -fn` reports the filesystem clean, and the directory does not participate in boot.

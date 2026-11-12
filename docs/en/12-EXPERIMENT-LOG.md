@@ -1,6 +1,6 @@
 Author/Maintainer: krollv, @DeepSeek V4.1 Flash 1017
 Copyright (C) 2026 自恋也是种美 (krollv)
-License: Apache-2.0 (original text)
+License: Apache-2.0
 
 # 12 — Experiment Log: Failed Experiments & Excluded Hypotheses (TB323FU / LineageOS 24)
 
@@ -190,4 +190,4 @@ Each line is a configuration that was tried and did **not** reach the desktop. R
 - `out/2026-11-11-los24-bootfix/VERIFY-REPORT.md` — `/vendor` ELOOP root cause and independent verification.
 - `out/2026-11-11-los24-bootfix/BOOT-DOCTOR-REVIEW.md` — capture verdicts and the split-by-`snap_len` correction.
 - `out/2026-11-11-los24-bootfix/ADB-ROOT-ANALYSIS.md` — adb authorization, wizard bypass, recovery-boot diagnosis.
-- `reports/BOOT-SUCCESS-20261111.md` (under `<WORKSPACE>/reports/`) — timeline reconstruction of the 2026-11-11 boot round, including the honest caveats (`sys.boot_completed` not directly read, single-variable not isolated).
+- `reports/BOOT-SUCCESS-20261111.md` (under `<WORKSPACE>/reports/`) — timeline reconstruction of the 2026-11-11 boot round, including the caveats (`sys.boot_completed` not directly read, single-variable not isolated).

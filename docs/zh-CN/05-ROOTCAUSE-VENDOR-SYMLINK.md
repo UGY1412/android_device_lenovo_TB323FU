@@ -205,9 +205,9 @@ python superkit.py compare --a audit_stock.json --b audit_v7.json
 - **22:40**——adb 首次枚举到 LineageOS 用户态：`Lenovo/lineage_TB323FU/TB323FU:17/CP2A.260605.016/eng.root:userdebug/test-keys`，`slot=_b`，`vbs=orange`。
 - **22:48–22:50**——用户目视进入 LineageOS 欢迎界面。
 - **2026-11-12 F0 修复集**——最终验收用的 `system` 镜像保留同一修复后的根布局（另加 doc 06 的 logdump 删除）。最终验收：`sys.boot_completed=1`、开机动画停止、FBE `file/encrypted`、`/metadata` 与 `/data` 正常挂载、连续 3 次 `adb reboot` 全部 PASS。
-- 诚实 caveat：22:18 那一刷同时改了多个变量（恢复原厂 GPT、`no_fail` fstab、日志包装器、`vbmeta_system_v8`），**未做单变量对照**，因此"仅 `/vendor` 修复"未在真机上单独隔离验证。结构性证明在字节与源码层面已闭环；且原厂"`/vendor` 为目录"的布局恰好是可开机形态，方向得到旁证。复现请按项目状态记录整套刷。
+- 注意：22:18 那一刷同时改了多个变量（恢复原厂 GPT、`no_fail` fstab、日志包装器、`vbmeta_system_v8`），**未做单变量对照**，因此"仅 `/vendor` 修复"未在真机上单独隔离验证。结构性证明在字节与源码层面已闭环；且原厂"`/vendor` 为目录"的布局恰好是可开机形态，方向得到旁证。复现请按项目状态记录整套刷。
 
-## 9. 已知 caveat / 未验证
+## 9. 已知限制 / 未验证
 
 1. 新建的 `/vendor`、`/dataext` 目录**没有 `security.selinux` xattr**；原厂 `/vendor` 带 `u:object_r:vendor_file:s0`、gid 2000，原厂 `/dataext` 带 `u:object_r:dataext_file:s0`。这不阻断首阶段（SELinux 尚未加载；挂载后目录被各分区文件系统覆盖），但若后续出现 `u:object_r:rootfs` 相关 denial，应补 xattr。
 2. `/lost+found/2898` 保留旧 `/vendor` symlink inode；`e2fsck -fn` 报文件系统 clean，该目录不参与启动。

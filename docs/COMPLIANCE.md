@@ -3,7 +3,7 @@
 Author/Maintainer: krollv, @DeepSeek V4.1 Flash 1017  
 作者/维护者：自恋也是种美，@DeepSeek V4.1 Flash 1017
 
-> This document is practical project documentation, not legal advice.
+> See NOTICE and CREDITS for attribution.
 > 本文是项目实践说明，不构成法律意见。
 
 ## 1. What this repository contains / 本仓库包含什么
@@ -42,8 +42,7 @@ Special notes / 特别说明:
 - **qingxin94/tb323fu-recovery** is a public AERA-recovery device tree for the
   same model; the companion AERA repository credits it as a reference.
 - **LineageOS/AOSP/TWRP/OrangeFox/AERA** files retain their licenses.
-- **DeepSeek V4.1 Flash 1017** is credited as a collaboration tool, not as a
-  copyright holder.
+- **DeepSeek V4.1 Flash 1017** is credited as a co-author for collaboration on code and documentation.
 
 ## 4. Redistribution of binaries / 二进制再分发
 

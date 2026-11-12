@@ -43,7 +43,7 @@ Replace them with your own absolute paths before running.
 
 ## Safety / 安全
 
-⚠️ These scripts write boot-critical partitions. Before any write:
+These scripts write boot-critical partitions. Before any write:
 
 1. Read a full backup of the partitions you intend to modify.
 2. Verify the target partition name/LUN/sector and the image SHA-256.
