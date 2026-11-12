@@ -15,7 +15,7 @@
 
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit_only.mk)
-# ★ 用 full_base_telephony.mk（**不是** full_base.mk）—— 两者继承链完全不同，不是同义：
+# 用 full_base_telephony.mk（**不是** full_base.mk）—— 两者继承链完全不同，不是同义：
 #     full_base.mk           → generic_no_telephony.mk        （不含 telephony）
 #     full_base_telephony.mk → aosp_base.mk + telephony.mk    （含 telephony）
 #   三条依据：
@@ -37,7 +37,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression.mk)
 # Dalvik heap 参数 —— 参考树同平台树用 6144（sm8475-common/common.mk:20）。
 #   选它的依据：本机 **12 GB RAM**（B 报告实测 cmdline `hqsysfs.pcba_hwid=SM8850P_12+256_11`），
 #   而本机树共 10 个变体、其中最大就是 6144（无 8/12 GB 档）。
-#   ⚠️ 路径陷阱：它们在 **frameworks/native/build/**，不在 build/make/target/product/。
+#   路径陷阱：它们在 **frameworks/native/build/**，不在 build/make/target/product/。
 #   不继承的后果：用 ART 默认堆参数 ⇒ 大应用易 GC 抖动/被系统杀，属"能用但体验差"。
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 

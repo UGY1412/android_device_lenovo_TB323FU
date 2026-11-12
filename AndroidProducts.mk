@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: The LineageOS Project
 # SPDX-License-Identifier: Apache-2.0
 #
-# ⚠️⚠️ 第二段（release config）**不是自由选项** —— 它决定 PLATFORM_SEPOLICY_VERSION，
+# 第二段（release config）**不是自由选项** —— 它决定 PLATFORM_SEPOLICY_VERSION，
 #      进而决定我们的 system 能否与原厂 vendor 的 precompiled_sepolicy 合并。
 #
 #   机制（完整推导链见 work/research/D-lunch-release-sepolicy.md）：

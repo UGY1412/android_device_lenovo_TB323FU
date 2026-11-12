@@ -49,7 +49,7 @@ TARGET_SUPPORTS_64_BIT_APPS := true
 # 密度 440：取自 props-lenovo-system/build.prop 的 `ro.sf.lcd_density=440`
 #           （vendor 侧 `vendor.display.lcd_density=440` 一致）。
 #
-# ⚠️ 为什么放在 BoardConfig 而不是 device.mk：
+# 为什么放在 BoardConfig 而不是 device.mk：
 #     消费者在 **BoardConfig 阶段**就会被读到 —— 实测本机 AOSP 树里
 #     `build/make/core/sysprop_config.mk:131-133`（生成 `ro.sf.lcd_density`）、
 #     `Makefile:2520-2523`（recovery density）、`soong_config.mk:547`、
@@ -67,7 +67,7 @@ TARGET_BOARD_PLATFORM := canoe
 TARGET_BOOTLOADER_BOARD_NAME := canoe
 
 # ---------------------------------------------------------------------------
-# ★（不编内核，但要显式声明内核版本）
+# （不编内核，但要显式声明内核版本）
 # ---------------------------------------------------------------------------
 # 本设备树**不编译内核** —— 使用原厂 prebuilt 内核（boot/init_boot/vendor_boot/dtbo
 # 全部保持原厂件，我们只换 system/system_ext/product）。
@@ -87,7 +87,7 @@ TARGET_BOOTLOADER_BOARD_NAME := canoe
 #     "TARGET_KERNEL_VERSION = ... Can be overriden in device trees
 #      in the event of prebuilt kernel."
 # 取值来源：设备实测内核 `6.12.69-android16-6` ⇒ 主版本 6.12。
-# ⚠️ 只写 "主版本.次版本"（不写第三段），因为 `kernel.mk:123` 会拿它跟 6.1 比大小。
+# 只写 "主版本.次版本"（不写第三段），因为 `kernel.mk:123` 会拿它跟 6.1 比大小。
 TARGET_KERNEL_VERSION := 6.12
 
 # `kernel.mk:141-145` 是个二选一检查：
@@ -103,7 +103,7 @@ TARGET_KERNEL_VERSION := 6.12
 BOARD_KERNEL_IMAGE_NAME := Image
 
 # ---------------------------------------------------------------------------
-# ★ 第 10 轮（2026-10-14）：补 TARGET_PREBUILT_KERNEL —— 本单唯一变量
+# 第 10 轮（2026-10-14）：补 TARGET_PREBUILT_KERNEL —— 本单唯一变量
 # ---------------------------------------------------------------------------
 # 第 9 轮已越过 kernel.mk 的 $(error)，但 ninja 停在：
 #     FAILED: ninja: 'out/target/product/TB323FU/kernel', needed by
@@ -159,7 +159,7 @@ BOARD_SUPER_PARTITION_SIZE := 21474836480
 
 # 动态分区：声明组名与上限，用于编译期尺寸校验。
 #
-# ⚠️ 组名**不带槽位后缀**。AOSP 会把这里的每个组名 to-upper 后当作变量前缀用
+# 组名**不带槽位后缀**。AOSP 会把这里的每个组名 to-upper 后当作变量前缀用
 #    （即 `BOARD_QTI_DYNAMIC_PARTITIONS_PARTITION_LIST` / `_SIZE`），
 #    若写成 `qti_dynamic_partitions_b`，构建系统就会去找
 #    `BOARD_QTI_DYNAMIC_PARTITIONS_B_PARTITION_LIST` —— 不存在 ⇒ 组配置读成空。
@@ -184,14 +184,14 @@ BOARD_PRODUCTIMAGE_MINIMAL_PARTITION_RESERVED_SIZE := false
 # 本机 ABL 信任 AOSP testkey 作为 AVB root of trust（实证见 REBOOT-REPORT §1.4 N7：
 # 社区"唯一能开机"的包用的就是这把 key）。LineageOS 官方设备树同样直接用它。
 #
-# ⚠️ chained vbmeta 的 flags 必须为 0：libavb 的 avb_slot_verify.c 对
+# chained vbmeta 的 flags 必须为 0：libavb 的 avb_slot_verify.c 对
 #    非主 vbmeta 且 flags != 0 的情况直接判 ERROR_INVALID_METADATA（不可恢复）。
 BOARD_AVB_ENABLE := true
 BOARD_AVB_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 0
 
-# ⚠️⚠️ 这里**故意不设** BOARD_AVB_{SYSTEM,SYSTEM_EXT,PRODUCT}_KEY_PATH / _ALGORITHM。
+# 这里**故意不设** BOARD_AVB_{SYSTEM,SYSTEM_EXT,PRODUCT}_KEY_PATH / _ALGORITHM。
 #   踩过的坑（2026-10-14，编译在 soong 分析阶段失败）：
 #     `build/soong/fsgen/vbmeta_partitions.go:175-180` 的判定是
 #         includeAsChainedPartitionInVbmeta(p) := p 存在于 PartitionQualifiedVariables
@@ -210,7 +210,7 @@ BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 0
 BOARD_AVB_VBMETA_SYSTEM := system system_ext product
 BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA4096
-# ⚠️ 必须 >= 原厂 vbmeta_system 的 rollback index（实测 1788566400 = 2026-09-05），
+# 必须 >= 原厂 vbmeta_system 的 rollback index（实测 1788566400 = 2026-09-05），
 #    否则可能触发降级保护。原厂 ri_location = 2（从 OEM vbmeta 的 chain descriptor 读出）。
 BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX := 1788566400
 BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 2
@@ -223,7 +223,7 @@ BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 2
 #          ② host_init_verifier 校验 init rc 的 group 名时需要它们有定义。
 # 先例报错（2026-10-11，handoff/2026-10-11-编译攻坚实录.md 类 11）：
 #     gnss-aidl-service-qti.rc: Unable to decode GID for 'vendor_qti_diag'
-# ⚠️ 路径要写成 `device/lenovo/TB323FU/config.fs`：本文件里**没有**定义 DEVICE_PATH
+# 路径要写成 `device/lenovo/TB323FU/config.fs`：本文件里**没有**定义 DEVICE_PATH
 #    （故意不定义 —— BoardConfig.mk 被 include 的时点早于它，写 $(DEVICE_PATH) 会展开成空）。
 TARGET_FS_CONFIG_GEN += device/lenovo/TB323FU/config.fs
 

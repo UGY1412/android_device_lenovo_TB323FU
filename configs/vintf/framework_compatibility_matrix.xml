@@ -1,5 +1,5 @@
 <compatibility-matrix version="1.0" type="framework">
-    <!-- ⚠️ 故意不写 level 属性：
+    <!-- 故意不写 level 属性：
          libvintf 的 checkMatrixHalsHasDefinition()（VintfObject.cpp:1358）对
          level==UNSPECIFIED 的矩阵片段直接跳过。原厂/底层厂商的私有接口定义
          不在 AOSP 树里（vendor/qcom/opensource/interfaces 只覆盖一小部分），

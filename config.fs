@@ -12,7 +12,7 @@
 #     gnss-aidl-service-qti.rc: Unable to decode GID for 'vendor_qti_diag'
 # 那批设备属主/组用的就是下面这批原厂私有 GID（2901~2917）。
 #
-# ⚠️⚠️ 格式**必须**是 `[AID_VENDOR_XXX]` 全大写 + `value: <数字>`。
+# 格式**必须**是 `[AID_VENDOR_XXX]` 全大写 + `value: <数字>`。
 #       类 12 记录的现实教训：格式写错会报
 #       `Invalid characters in AID section at "4"... Expecting upper case`。
 #
